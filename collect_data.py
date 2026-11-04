@@ -54,13 +54,15 @@ def key_handler(key):
 
 def draw_overlay(frame, last_key_pressed):
     display = frame.copy()  # on dessine sur une copie : les images sauvegardées restent propres
+
+    key = "" if not last_key_pressed else last_key_pressed
     
-    cv2.putText(display, f"Key pressed (suppr to cancel) : {last_key_pressed if last_key_pressed!= "" else "None"} => images for key are saving", (10,30), cv2.FONT_HERSHEY_PLAIN, 1.2, (0,0,0),1, cv2.LINE_AA)
+    cv2.putText(display, f"Key pressed (suppr to cancel) : {key if key!= "" else "None"} => ({count_images(key)}/{IMAGES_PER_LETTER})", (10,30), cv2.FONT_HERSHEY_PLAIN, 1.2, (0,0,0),1, cv2.LINE_AA)
 
     return display
 
 def collect_data(cap:cv2.VideoCapture):
-    last_key_pressed = ""
+    last_key_pressed = None
     
     while True:
         ret, frame = cap.read()
