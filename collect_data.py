@@ -17,23 +17,22 @@ last_key_pressed = ""
 
 while True:
     ret, frame = cap.read()
-    cv2.putText(frame, f"Key pressed (suppr to cancel) : {last_key_pressed if last_key_pressed!= "" else "None"} => images for key are saving", (10,30), cv2.FONT_HERSHEY_PLAIN, 1.2, (0,0,0),1, cv2.LINE_AA)
     if not ret: 
         break
     
+    cv2.putText(frame, f"Key pressed (suppr to cancel) : {last_key_pressed if last_key_pressed!= "" else "None"} => images for key are saving", (10,30), cv2.FONT_HERSHEY_PLAIN, 1.2, (0,0,0),1, cv2.LINE_AA)
     cv2.imshow("frame", frame)
 
     key  = cv2.waitKey(30)
     if key ==27:
         break
-    elif key != -1:
-        if key == 8: #delete
-            last_key_pressed = ""
 
-        #a = 97, z = 122
-        if key >= 97 and key <= 122:
-            last_key_pressed = chr(key)
+    elif key == 8: #delete
+        last_key_pressed = ""
 
+    if key >= 97 and key <= 122:  #a = 97, z = 122
+        last_key_pressed = chr(key)
+        
 
     #close with the cross
     if cv2.getWindowProperty("frame", cv2.WND_PROP_VISIBLE) < 1:
