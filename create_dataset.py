@@ -2,7 +2,7 @@ import cv2
 import os
 import mediapipe as mp
 import matplotlib.pyplot as plt
-
+import pickle
 import utils
 
 
@@ -30,7 +30,7 @@ for letter in os.listdir(utils.DATA_DIR):
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
                 # pour chaque image, on extrait tous les landmarks
-                
+
                 #mp_drawing.draw_landmarks(img_rgb,hand_landmarks,mp_hands.HAND_CONNECTIONS,mp_drawing_styles.get_default_hand_landmarks_style(),mp_drawing_styles.get_default_hand_connections_style())
                 for i in range(len(hand_landmarks.landmark)):
                     #hand_landmarks.landmark[i] = position of the landmark
@@ -42,4 +42,8 @@ for letter in os.listdir(utils.DATA_DIR):
 
             data.append(data_img)
             labels.append(letter)
+
+f = open("data.pickle", "wb")
+pickle.dump({"data": data, "label":labels}, f)
+f.close()
 
