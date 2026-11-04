@@ -18,11 +18,11 @@ labels = [] # categories of each images
 
 
 for letter in os.listdir(utils.DATA_DIR):
-    for img_path in os.listdir(os.path.join(letter)):
+    for img_path in os.listdir(os.path.join(utils.DATA_DIR, letter)):
 
         data_img = []
 
-        image = cv2.imread(os.path.join(utils.DATA_DIR, dir, img_path))
+        image = cv2.imread(os.path.join(utils.DATA_DIR, letter, img_path))
         img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
 
@@ -44,6 +44,6 @@ for letter in os.listdir(utils.DATA_DIR):
             labels.append(letter)
 
 f = open("data.pickle", "wb")
-pickle.dump({"data": data, "label":labels}, f)
+pickle.dump({"data": data, "labels":labels}, f)
 f.close()
 
