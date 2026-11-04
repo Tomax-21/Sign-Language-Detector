@@ -1,1 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+build/
+dist/
+
+# Environnements virtuels
+.venv/
+.venv-wsl/
+venv/
+env/
+
+# Secrets
+.env
+
+# Données et modèles générés par le projet
 data/
+data.pickle
+model.p
+*.pickle
+check_*.png
+
+# Modèle MediaPipe (se retélécharge)
+hand_landmarker.task
+
+# Outils et caches
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+
+# Éditeurs et système
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
