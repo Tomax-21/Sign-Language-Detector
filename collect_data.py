@@ -17,7 +17,7 @@ last_key_pressed = ""
 
 while True:
     ret, frame = cap.read()
-    #cv2.putText(frame, "")
+    cv2.putText(frame, f"Key pressed (suppr to cancel) : {last_key_pressed if last_key_pressed!= "" else "None"} => images for key are saving", (10,30), cv2.FONT_HERSHEY_PLAIN, 1.2, (0,0,0),1, cv2.LINE_AA)
     if not ret: 
         break
     
