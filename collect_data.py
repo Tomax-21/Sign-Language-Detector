@@ -4,18 +4,42 @@ import cv2
 
 DATA_DIR = "./data"
 IMAGES_PER_LETTER = 100
+QUIT, STOP, SET_LETTER, NOTHING = "quit", "stop", "set_letter", "nothing"
 
 
 def init_letter_dir(letter):
-    if not os.path.exists(os.path.join(DATA_DIR, letter)):
-        os.makedirs(os.path.join(DATA_DIR, letter))
+    path = os.path.join(DATA_DIR, letter)
+    os.makedirs(path, exist_ok=True)
+    return path
 
-def save_image(letter):
-    init_letter_dir(letter=letter)
+def next_index(letter):
+    path = init_letter_dir(letter)
+    indexes = []
+    for filename in os.listdir(path):
+        name, extension = os.path.splitext(filename)
+        if extension == ".jpg" and name.isdigit():
+            indexes.append(int(name))
+
+    return max(indexes) + 1 if indexes else 0
+
+
+
+def count_images(letter):
+    path = os.path.join(DATA_DIR, letter)
+    if not os.path.isdir(path):
+        return 0
+    return len([f for f in os.listdir(path) if f.endswith(".jpg")])
+
+
+
+def save_image(letter, frame):
+    path = init_letter_dir(letter)
+    index = next_index(letter)
+    cv2.imwrite(os.path.join(path, f"{index}.jpg"), frame)
+
     
 
 
-QUIT, STOP, SET_LETTER, NOTHING = "quit", "stop", "set_letter", "nothing"
 def key_handler(key):
     if key == 27:
         return QUIT, None
@@ -42,6 +66,13 @@ def collect_data(cap:cv2.VideoCapture):
         ret, frame = cap.read()
         if not ret: 
             break
+
+        if last_key_pressed:
+            if count_images(last_key_pressed) < IMAGES_PER_LETTER:
+                save_image(last_key_pressed, frame)
+            else:
+                print(f"Lettre {last_key_pressed} terminée ({IMAGES_PER_LETTER} images)")
+                last_key_pressed = None
         
         cv2.imshow("frame", draw_overlay(frame, last_key_pressed))
 
