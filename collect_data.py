@@ -1,11 +1,12 @@
 import os
 import cv2
+import time
 
 
 DATA_DIR = "./data"
 IMAGES_PER_LETTER = 100
 QUIT, STOP, SET_LETTER, NOTHING = "quit", "stop", "set_letter", "nothing"
-
+SAVE_INTERVAL = 0.2
 
 def init_letter_dir(letter):
     path = os.path.join(DATA_DIR, letter)
@@ -63,6 +64,8 @@ def draw_overlay(frame, last_key_pressed):
 
 def collect_data(cap:cv2.VideoCapture):
     last_key_pressed = None
+    last_save_time = 0
+
     
     while True:
         ret, frame = cap.read()
@@ -70,11 +73,16 @@ def collect_data(cap:cv2.VideoCapture):
             break
 
         if last_key_pressed:
-            if count_images(last_key_pressed) < IMAGES_PER_LETTER:
-                save_image(last_key_pressed, frame)
-            else:
+            if count_images(last_key_pressed) >= IMAGES_PER_LETTER:
                 print(f"Lettre {last_key_pressed} terminée ({IMAGES_PER_LETTER} images)")
                 last_key_pressed = None
+
+            elif time.time() - last_save_time >= SAVE_INTERVAL:
+                save_image(last_key_pressed, frame)
+                last_save_time = time.time()
+
+
+                
         
         cv2.imshow("frame", draw_overlay(frame, last_key_pressed))
 
