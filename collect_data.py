@@ -56,7 +56,7 @@ def draw_overlay(frame, last_key_pressed):
 
     key = "" if not last_key_pressed else last_key_pressed
     
-    cv2.putText(display, f"Key pressed (suppr to cancel) : {key if key!= "" else "None"} => ({count_images(key)}/{IMAGES_PER_LETTER})", (10,30), cv2.FONT_HERSHEY_PLAIN, 1.2, (0,0,0),1, cv2.LINE_AA)
+    cv2.putText(display, f"Key pressed (suppr to cancel) : {key if key!= "" else "None"} => ({count_images(key)}/{utils.IMAGES_PER_LETTER})", (10,30), cv2.FONT_HERSHEY_PLAIN, 1.2, (0,0,0),1, cv2.LINE_AA)
 
     return display
 
