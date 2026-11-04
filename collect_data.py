@@ -13,8 +13,11 @@ if not cap.isOpened():
     raise RuntimeError("Cant open the webcam")
 
 
+last_key_pressed = ""
+
 while True:
     ret, frame = cap.read()
+    #cv2.putText(frame, "")
     if not ret: 
         break
     
@@ -22,6 +25,18 @@ while True:
 
     key  = cv2.waitKey(30)
     if key ==27:
+        break
+    elif key != -1:
+        if key == 8: #delete
+            last_key_pressed = ""
+
+        #a = 97, z = 122
+        if key >= 97 and key <= 122:
+            last_key_pressed = chr(key)
+
+
+    #close with the cross
+    if cv2.getWindowProperty("frame", cv2.WND_PROP_VISIBLE) < 1:
         break
 
 cap.release()
