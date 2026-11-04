@@ -2,14 +2,12 @@ import os
 import cv2
 import time
 
+import utils
 
-DATA_DIR = "./data"
-IMAGES_PER_LETTER = 100
-QUIT, STOP, SET_LETTER, NOTHING = "quit", "stop", "set_letter", "nothing"
-SAVE_INTERVAL = 0.2
+
 
 def init_letter_dir(letter):
-    path = os.path.join(DATA_DIR, letter)
+    path = os.path.join(utils.DATA_DIR, letter)
     os.makedirs(path, exist_ok=True)
     return path
 
@@ -26,7 +24,7 @@ def next_index(letter):
 
 
 def count_images(letter):
-    path = os.path.join(DATA_DIR, letter)
+    path = os.path.join(utils.DATA_DIR, letter)
     if not os.path.isdir(path):
         return 0
     return len([f for f in os.listdir(path) if f.endswith(".jpg")])
@@ -43,14 +41,14 @@ def save_image(letter, frame):
 
 def key_handler(key):
     if key == 27:
-        return QUIT, None
+        return utils.QUIT, None
     if key == 8:
-        return STOP, None
+        return utils.STOP, None
     if ord("a") <= key <= ord("z"):
         letter = chr(key).upper()
 
-        return SET_LETTER, letter
-    return NOTHING, None
+        return utils.SET_LETTER, letter
+    return utils.NOTHING, None
 
 
 def draw_overlay(frame, last_key_pressed):
@@ -73,11 +71,11 @@ def collect_data(cap:cv2.VideoCapture):
             break
 
         if last_key_pressed:
-            if count_images(last_key_pressed) >= IMAGES_PER_LETTER:
-                print(f"Lettre {last_key_pressed} terminée ({IMAGES_PER_LETTER} images)")
+            if count_images(last_key_pressed) >= utils.IMAGES_PER_LETTER:
+                print(f"Lettre {last_key_pressed} terminée ({utils.IMAGES_PER_LETTER} images)")
                 last_key_pressed = None
 
-            elif time.time() - last_save_time >= SAVE_INTERVAL:
+            elif time.time() - last_save_time >= utils.SAVE_INTERVAL:
                 save_image(last_key_pressed, frame)
                 last_save_time = time.time()
 
@@ -87,11 +85,11 @@ def collect_data(cap:cv2.VideoCapture):
         cv2.imshow("frame", draw_overlay(frame, last_key_pressed))
 
         action, letter = key_handler(cv2.waitKey(30))
-        if action == QUIT:
+        if action == utils.QUIT:
             break
-        elif action == STOP:
+        elif action == utils.STOP:
             last_key_pressed = None
-        elif action == SET_LETTER:
+        elif action == utils.SET_LETTER:
             last_key_pressed = letter
 
        
@@ -105,7 +103,7 @@ def collect_data(cap:cv2.VideoCapture):
 
 
 def main():
-    os.makedirs(DATA_DIR, exist_ok=True)
+    os.makedirs(utils.DATA_DIR, exist_ok=True)
 
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
