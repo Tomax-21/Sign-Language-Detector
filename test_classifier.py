@@ -1,7 +1,7 @@
 import cv2
 import mediapipe as mp
 import pickle
-
+import numpy as np
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -44,10 +44,13 @@ while True:
             data_img.append(x)
             data_img.append(y)
 
+        prediction = model.predict([np.asarray(data_img)])
+
+
 
 
     cv2.imshow("frame", frame)
-    cv2.waitKey(30)
+    cv2.waitKey(1)
 
 
 cap.release()
