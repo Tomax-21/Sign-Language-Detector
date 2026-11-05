@@ -3,6 +3,11 @@ import mediapipe as mp
 import pickle
 import numpy as np
 
+
+model_dict = pickle.load(open("./model.p", "rb"))
+model = model_dict['model']
+
+
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -10,10 +15,11 @@ mp_drawing_styles = mp.solutions.drawing_styles
 hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
 
-model_dict = pickle.load(open("./model.p", "rb"))
-model = model_dict['model']
 
 cap = cv2.VideoCapture(0)
+if not cap.isOpened():
+    raise RuntimeError("Impossible d'ouvrir la caméra (essaie l'index 1 ou 2)")
+
 
 while True:
 
@@ -37,7 +43,6 @@ while True:
             )
 
         for i in range(len(hand_landmarks.landmark)):
-            #hand_landmarks.landmark[i] = position of the landmark
             x = hand_landmarks.landmark[i].x
             y = hand_landmarks.landmark[i].y
         
@@ -45,7 +50,7 @@ while True:
             data_img.append(y)
 
         prediction = model.predict([np.asarray(data_img)])
-
+        print(prediction)
 
 
 
