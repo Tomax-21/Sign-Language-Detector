@@ -39,15 +39,18 @@ def save_image(letter, frame):
     
 
 
-def key_handler(key):
+def key_handler(key, previous_key):
     if key == 27:
         return utils.QUIT, None
     if key == 8:
         return utils.STOP, None
     if ord("a") <= key <= ord("z"):
+        if chr(key).upper() ==  previous_key:
+            return utils.STOP, None
+        
         letter = chr(key).upper()
-
         return utils.SET_LETTER, letter
+    
     return utils.NOTHING, None
 
 
@@ -84,7 +87,7 @@ def collect_data(cap:cv2.VideoCapture):
         
         cv2.imshow("frame", draw_overlay(frame, last_key_pressed))
 
-        action, letter = key_handler(cv2.waitKey(30))
+        action, letter = key_handler(cv2.waitKey(30), last_key_pressed)
         if action == utils.QUIT:
             break
         elif action == utils.STOP:
